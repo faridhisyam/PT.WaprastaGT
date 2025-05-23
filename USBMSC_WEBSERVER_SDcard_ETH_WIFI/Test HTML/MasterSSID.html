@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ganti WiFi</title>
+  <style>
+    /* Reset & dasar */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+      color: #e0e0e0;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: #1e1e1e;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+      max-width: 600px;
+      width: 100%;
+      margin: auto;
+      border-top: 8px solid #4CAF50;
+      transition: transform 0.3s ease-in-out;
+      text-align: center;
+    }
+    .container:hover { transform: scale(1.02); }
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 30px;
+      font-size: 24px;
+      text-align: center;
+    }
+    .info-box {
+      background: #2e2e2e;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      font-size: 16px;
+      text-align: left;
+    }
+    .info-box p { margin: 8px 0; }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+    label {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="password"] {
+      width: 55%;
+      padding: 12px 24px;
+      border: 1px solid #4CAF50;
+      border-radius: 25px;
+      background-color: rgba(255,255,255,0.05);
+      color: #e0e0e0;
+      font-size: 16px;
+    }
+    input[type="submit"] {
+      display: block;
+      width: 55%;
+      padding: 12px 24px;
+      border: 1px solid #4CAF50;
+      border-radius: 25px;
+      background-color: rgba(255,255,255,0.05);
+      color: #e0e0e0;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    input[type="submit"]:hover {
+      background-color: #4CAF50;
+      color: #121212;
+    }
+    /* Tombol toggle untuk menampilkan kata sandi lama */
+    #toggle-password {
+      background: none;
+      border: none;
+      color: #4CAF50;
+      cursor: pointer;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+    /* Tombol kembali menggunakan gaya tombol menu seperti di program sebelumnya */
+    .links {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .links a {
+      text-decoration: none;
+      color: #4CAF50;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+    .links a:hover { color: #66BB6A; }
+    @media (max-width: 600px) {
+      .container { padding: 20px; }
+      h1 { font-size: 18px; }
+      input[type="text"], input[type="password"], input[type="submit"], .menu-button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ganti WiFi</h1>
+    <div class="info-box">
+      <p><strong>WiFi Lama:</strong> MyOldSSID</p>
+      <p>
+        <strong>Kata Sandi Lama:</strong>
+        <span id="prev-password">******</span>
+        <button type="button" id="toggle-password" title="Lihat Kata Sandi">👁</button>
+      </p>
+    </div>
+    <form action="/MasterSSID.html" method="post" onsubmit="alert('WiFi sudah diubah!')">
+      <label for="new-ssid">Nama WiFi Baru:</label>
+      <input type="text" id="new-ssid" name="ssid" placeholder="Tulis nama WiFi baru di sini" required>
+      
+      <label for="new-password">Kata Sandi Baru:</label>
+      <input type="password" id="new-password" name="password" placeholder="Tulis kata sandi baru di sini" required>
+      
+      <input type="submit" value="Ubah WiFi">
+    </form>
+    <div class="links">
+        <a href="Master.html">Kembali</a>
+    </div>
+  </div>
+  <script>
+    // Toggle untuk menampilkan atau menyembunyikan kata sandi lama
+    const toggleButton = document.getElementById('toggle-password');
+    const passwordSpan = document.getElementById('prev-password');
+    let isPasswordVisible = false;
+    const actualPassword = "MyOldPassword"; // Ganti dengan data asli dari ESP32 bila perlu
+    
+    toggleButton.addEventListener('click', function() {
+      if (!isPasswordVisible) {
+        passwordSpan.textContent = actualPassword;
+        toggleButton.title = "Sembunyikan Kata Sandi";
+        isPasswordVisible = true;
+      } else {
+        passwordSpan.textContent = "******";
+        toggleButton.title = "Lihat Kata Sandi";
+        isPasswordVisible = false;
+      }
+    });
+  </script>
+</body>
+</html>

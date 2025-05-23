@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informasi SD Card</title>
+  <style>
+    /* Reset & dasar */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: #1e1e1e;
+      border-radius: 20px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+      max-width: 600px;
+      width: 100%;
+      padding: 30px;
+      border-top: 8px solid #4CAF50;
+      transition: transform 0.3s ease;
+    }
+    .container:hover {
+      transform: scale(1.02);
+    }
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 20px;
+      font-size: 24px;
+      text-align: center;
+    }
+    /* Layout responsif untuk circular progress dan info detail */
+    .info-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    .circular-progress {
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
+    .circular-progress svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    .circular-progress circle {
+      fill: none;
+      stroke-width: 20;
+      stroke-linecap: round;
+    }
+    .circular-progress .free {
+      stroke: #FFEB3B;
+      transition: stroke-dasharray 0.5s, stroke-dashoffset 0.5s;
+    }
+    .circular-progress .used {
+      stroke: #2196F3;
+      transition: stroke-dasharray 0.5s;
+    }
+    .circular-progress .text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #e0e0e0;
+    }
+    .circular-progress .text div {
+      font-size: 18px;
+      font-weight: 500;
+    }
+    .info-details {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 200px;
+    }
+    .info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+    }
+    .info span:first-child {
+      flex: 1;
+      color: #aaa;
+    }
+    .info .value {
+      font-weight: bold;
+      color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+    .legend-box.used-box {
+      background-color: #2196F3;
+    }
+    .legend-box.free-box {
+      background-color: #FFEB3B;
+    }
+    /* Tombol kembali tetap di kiri */
+    .back-btn {
+      display: inline-block;
+      text-align: left;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #4CAF50;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+    .back-btn:hover {
+      color: #66BB6A;
+    }
+    /* Responsif untuk layar kecil */
+    @media (max-width: 600px) {
+      .info-container {
+        flex-direction: column;
+      }
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 20px;
+      }
+      .info {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Informasi SD Card</h1>
+    <div class="info-container">
+      <div class="circular-progress">
+        <svg>
+          <!-- Arc free (kuning) digambar terlebih dahulu -->
+          <circle class="free" cx="90" cy="90" r="70"></circle>
+          <!-- Arc used (biru) di atasnya -->
+          <circle class="used" cx="90" cy="90" r="70"></circle>
+        </svg>
+        <div class="text">
+          <div id="used-percentage">60%</div>
+          <div>Used</div>
+        </div>
+      </div>
+      <div class="info-details">
+        <div class="info">
+          <span>Type</span>
+          <span class="value">SDHC</span>
+        </div>
+        <div class="info">
+          <span>System</span>
+          <span class="value">FAT32</span>
+        </div>
+        <div class="info">
+          <span>Total</span>
+          <span id="total-size" class="value">0 MB</span>
+        </div>
+        <div class="info">
+          <span>Used</span>
+          <span class="value" id="used-size">0 MB <span class="legend-box used-box"></span></span>
+        </div>
+        <div class="info">
+          <span>Free</span>
+          <span class="value" id="free-size">0 MB <span class="legend-box free-box"></span></span>
+        </div>
+      </div>
+    </div>
+    <a href="file:///F:/KULIAH/KP/Project%20KP%20-%20FTP%20Server/Bisa/USBMSC_WEBSERVER_SDcard_ETH_WIFI/Test%20HTML/handleIndex.html" class="back-btn">Kembali</a>
+  </div>
+  <script>
+    // Data sample dalam KB
+    const totalSize = 80000;
+    const usedSize = 60000;
+    const freeSize = totalSize - usedSize;
+
+    // Update informasi ukuran dalam MB
+    document.getElementById('total-size').innerText = (totalSize / 1024).toFixed(2) + ' MB';
+    document.getElementById('used-size').childNodes[0].nodeValue = (usedSize / 1024).toFixed(2) + ' MB';
+    document.getElementById('free-size').childNodes[0].nodeValue = (freeSize / 1024).toFixed(2) + ' MB';
+
+    // Pengaturan untuk circular progress dengan radius baru
+    const radius = 70;
+    const circumference = 2 * Math.PI * radius;
+    const usedFraction = usedSize / totalSize;
+    const usedArc = usedFraction * circumference;
+    const freeArc = (freeSize / totalSize) * circumference;
+
+    // Update persentase di tengah circle
+    document.getElementById('used-percentage').innerText = (usedFraction * 100).toFixed(2) + '%';
+
+    // Konfigurasi untuk arc used (biru)
+    const usedCircle = document.querySelector('.circular-progress .used');
+    usedCircle.style.strokeDasharray = `${usedArc} ${circumference}`;
+    usedCircle.style.strokeDashoffset = '0';
+
+    // Konfigurasi untuk arc free (kuning)
+    const freeCircle = document.querySelector('.circular-progress .free');
+    freeCircle.style.strokeDasharray = `${freeArc} ${circumference}`;
+    // Menggeser free arc sehingga mulai setelah used arc
+    freeCircle.style.strokeDashoffset = `-${usedArc}`;
+  </script>
+</body>
+</html>
+
