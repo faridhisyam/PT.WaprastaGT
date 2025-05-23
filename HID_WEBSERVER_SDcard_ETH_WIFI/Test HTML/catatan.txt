@@ -1,0 +1,57 @@
+Di C/C++ kamu tidak bisa langsung melakukan assignment ke seluruh array (misalnya, `mac = newMac;`) karena array merupakan blok memori statis. Namun, kamu bisa mengganti seluruh nilai di dalam array dengan dua cara utama:
+
+1. **Menggunakan Loop:**  
+   Kamu bisa melakukan iterasi pada setiap elemen dan mengisinya dengan nilai baru.
+
+   ```c
+   byte newMac[6] = { /* nilai baru yang sudah diambil dan dikonversi */ };
+   for (int i = 0; i < 6; i++) {
+       mac[i] = newMac[i];
+   }
+   ```
+
+2. **Menggunakan memcpy:**  
+   Fungsi `memcpy` dari header `<string.h>` dapat menyalin blok memori dari array baru ke array yang sudah ada.
+
+   ```c
+   #include <string.h>
+   byte newMac[6] = { /* nilai baru yang sudah diambil dan dikonversi */ };
+   memcpy(mac, newMac, sizeof(newMac));
+   ```
+
+Jika data baru kamu ambil dari EEPROM sebagai string, kamu juga perlu mengkonversinya ke format byte terlebih dahulu, kemudian simpan nilainya ke dalam array baru (`newMac`) sebelum menyalinnya ke `mac`.
+
+Contoh lengkap jika data EEPROM berupa string dengan format "DE:AD:BE:EF:FE:01":
+
+```c
+#include <string.h>
+#include <stdlib.h>
+
+byte mac[6] = { 0xDE, 0xAD, 0xBE, 0xEF, 0x00, 0x00 };
+
+void ambilDataEEPROM(){
+  preferences.begin("webData", true);
+  // Misalnya, data disimpan sebagai string: "DE:AD:BE:EF:FE:01"
+  String macStr = preferences.getString("mac", "DE:AD:BE:EF:00:00");
+  preferences.end();
+  
+  byte newMac[6];
+  int index = 0;
+  int start = 0;
+  
+  // Mengambil setiap token yang dipisahkan oleh ':'
+  for (int i = 0; i <= macStr.length() && index < 6; i++) {
+    if (i == macStr.length() || macStr.charAt(i) == ':') {
+      String token = macStr.substring(start, i);
+      newMac[index] = (byte) strtol(token.c_str(), NULL, 16);
+      index++;
+      start = i + 1;
+    }
+  }
+  
+  // Ganti seluruh array mac dengan nilai baru
+  memcpy(mac, newMac, sizeof(newMac));
+}
+```
+
+Dengan cara di atas, seluruh array `mac` akan di-update sesuai dengan data yang diambil dari EEPROM. Pastikan bahwa data yang disimpan di EEPROM valid dan dalam format yang diharapkan agar konversi berjalan dengan benar.
