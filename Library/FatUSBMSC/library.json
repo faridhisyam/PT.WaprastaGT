@@ -1,0 +1,19 @@
+{
+    "name": "FatUSBMSC",
+    "keywords" : "usbmsc",
+    "description" : "Arduino library for ESP32-(S2/S3) series to provide FAT partition(s) as usb drive(s)",
+    "repostitory" : {
+        "type" : "git",
+        "url" : "https://github.com/sivar2311/fatusbmsc.git"
+    },
+    "version": "0.1.2",
+    "authors": [
+        {
+            "name": "Boris Jaeger",
+            "email" : "sivar2311@gmail.com",
+            "maintainer": true
+        }
+    ],
+    "frameworks" : "arduino",
+    "platforms" : ["espressif32"]
+}
