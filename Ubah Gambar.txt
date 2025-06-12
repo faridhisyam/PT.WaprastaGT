@@ -1,0 +1,19 @@
+Membuat gambar yang akan ditampilkan
+- Pastikan gambarnya berada di kisaran 800 x 480 px, jangan sampai melebihi ukuran pixelnya
+- Export gambar ke .png dengan konfigurasi (color mode : paletted (8-bit), hilangkan checklist pada checkbox transparency)
+- Klik Ok
+
+Image converter lvgl
+- Masuk link https://lvgl.io/tools/imageconverter pada browser (saran menggunakan google chrome)
+- Pilih LVGL v8
+- Select image yang sudah di export tadi ke dalam .png
+- Color Format = CF_RGB565A8
+- Output Format = Binary RGB565
+- Setelah itu klik convert dan otomatis akan mendownload file .bin
+
+Buka Program IDE
+- Cari fungsi lv_obj_set_style_bg_img_src lalu nanti akan menemukan beberapa fungsi dengan nama gambar yang berbeda-beda sesuai dengan gambar yang ditampilkan
+- Kita pilih salah satu gambar mana yang akan dirubah, misal S:/WaprastaYazaki.bin
+- Pada hasil convert .png ke .bin tadi ubah namanya menjadi WaprastaYazaki.bin
+- Setelah itu copot kartu sd yang ada di layar dan salin file WaprastaYazaki.bin ke dalam kartu sd tersebut.
+- Lalu pasang Kembali dan gambar sudah ganti (jangan lupa direset terlebih dahulu)
